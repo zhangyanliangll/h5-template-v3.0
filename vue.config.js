@@ -140,7 +140,7 @@ module.exports = {
             cacheGroups: {
               default: false,
               vendor: {
-                test (module) {
+                test: (module) => {
                   let path = module.resource
                   if (!path) return true
                   path = path.replace(/\\/g, '/')
@@ -157,7 +157,7 @@ module.exports = {
                 enforce: true,
               },
               axios: {
-                test (module) {
+                test: (module) => {
                   let path = module.resource
                   if (!path) return false
                   path = path.replace(/\\/g, '/')
@@ -168,7 +168,7 @@ module.exports = {
                 enforce: true,
               },
               vant: {
-                test (module) {
+                test: (module) => {
                   let path = module.resource
                   if (!path) return false
                   path = path.replace(/\\/g, '/')
@@ -179,7 +179,7 @@ module.exports = {
                 enforce: true,
               },
               vue: {
-                test (module) {
+                test: (module) => {
                   let path = module.resource
                   if (!path) return false
                   path = path.replace(/\\/g, '/')
@@ -190,7 +190,7 @@ module.exports = {
                 enforce: true,
               },
               common: {
-                test (module) {
+                test: (module) => {
                   let path = module.resource
                   if (!path) return false
                   path = path.replace(/\\/g, '/')
