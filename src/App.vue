@@ -17,6 +17,7 @@ export default defineComponent({
   setup() {
     const isRouterAlive = ref(true)
     console.log('!23123')
+    console.log('!23123')
 
     provide('reload', reload)
     async function reload() {
