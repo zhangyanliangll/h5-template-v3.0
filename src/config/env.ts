@@ -4,6 +4,7 @@ const isTest = process.env.NODE_ENV === 'test'
 const notTest = process.env.NODE_ENV !== 'test'
 const isPro = process.env.NODE_ENV === 'production'
 const notPro = process.env.NODE_ENV !== 'production'
+const isAnalyze = process.env.ANALYZE
 
 module.exports = {
   isDev,
@@ -12,4 +13,5 @@ module.exports = {
   notTest,
   isPro,
   notPro,
+  isAnalyze,
 }

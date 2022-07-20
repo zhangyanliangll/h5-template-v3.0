@@ -6,6 +6,7 @@
     "serve": "vue-cli-service serve",
     "build:test": "vue-cli-service build --mode test",
     "build:prod": "vue-cli-service build",
+    "analyze": "cross-env ANALYZE=true yarn build:prod",
     "lint": "vue-cli-service lint",
     "preinstall": "node ./scripts/check-yarn.js"
   },

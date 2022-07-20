@@ -1,7 +1,7 @@
 /**
  * vue.config 配置
  */
-const { isDev, notDev, isPro } = require('./src/config/env.ts')
+const { isDev, notDev, isPro, isAnalyze } = require('./src/config/env.ts')
 const CompressionPlugin = require('compression-webpack-plugin')
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
@@ -69,6 +69,12 @@ module.exports = {
         .splitChunks({ chunks: 'all' }) // 分割代码
     }
 
+    if (isAnalyze) {
+      config
+        .plugin('webpack-bundle-analyzer')
+        .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin)
+    }
+
     // 忽略的模块
     // config.externals({
     //   vue: 'Vue',
@@ -134,7 +140,7 @@ module.exports = {
             cacheGroups: {
               default: false,
               vendor: {
-                test(module) {
+                test (module) {
                   let path = module.resource
                   if (!path) return true
                   path = path.replace(/\\/g, '/')
@@ -151,7 +157,7 @@ module.exports = {
                 enforce: true,
               },
               axios: {
-                test(module) {
+                test (module) {
                   let path = module.resource
                   if (!path) return false
                   path = path.replace(/\\/g, '/')
@@ -162,7 +168,7 @@ module.exports = {
                 enforce: true,
               },
               vant: {
-                test(module) {
+                test (module) {
                   let path = module.resource
                   if (!path) return false
                   path = path.replace(/\\/g, '/')
@@ -173,7 +179,7 @@ module.exports = {
                 enforce: true,
               },
               vue: {
-                test(module) {
+                test (module) {
                   let path = module.resource
                   if (!path) return false
                   path = path.replace(/\\/g, '/')
@@ -184,7 +190,7 @@ module.exports = {
                 enforce: true,
               },
               common: {
-                test(module) {
+                test (module) {
                   let path = module.resource
                   if (!path) return false
                   path = path.replace(/\\/g, '/')
