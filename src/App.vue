@@ -1,30 +1,42 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
-  <router-view />
+  <keep-alive>
+    <router-view
+      class="app-content-box"
+      v-if="$route.meta.keepAlive && isRouterAlive"
+    ></router-view>
+  </keep-alive>
+  <router-view
+    class="app-content-box"
+    v-if="!$route.meta.keepAlive && isRouterAlive"
+  ></router-view>
 </template>
 
-<style lang="scss">
+<script lang="ts">
+import { defineComponent, ref, provide, nextTick } from 'vue'
+export default defineComponent({
+  setup() {
+    const isRouterAlive = ref(true)
+
+    provide('reload', reload)
+    async function reload() {
+      isRouterAlive.value = false
+      await nextTick()
+      isRouterAlive.value = true
+    }
+
+    return {
+      isRouterAlive,
+    }
+  },
+})
+</script>
+
+<style lang="scss" scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
 }
 </style>
