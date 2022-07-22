@@ -1,14 +1,6 @@
 import type { AxiosRequestConfig } from 'axios'
+import type { RequestParam } from '@/typings/server.d'
 import CustomAxiosInstance from './instance'
-
-type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
-
-interface RequestParam {
-  url: string
-  method?: RequestMethod
-  data?: any
-  axiosConfig?: AxiosRequestConfig
-}
 
 /**
  * 创建请求

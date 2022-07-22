@@ -11,3 +11,16 @@ export declare namespace FetchResponse {
     status: string
   }
 }
+
+// 请求方式
+export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
+
+// 请求参数
+export interface RequestParam {
+  url: string
+  method: RequestMethod
+  data?: any
+  axiosConfig?: AxiosRequestConfig
+}
+
+export type RequestFunType = (options: RequestParam) => Promise<any>
