@@ -5,6 +5,7 @@ import { createRequest } from './request'
 export const api = createRequest({
   baseURL: isDev ? '/api' : API_BASE_URL, //接口请求地址
   timeout: REQUEST_TIMEOUT,
+  headers: { 'Content-Type': 'application/json' },
 })
 
 export const request: RequestFunType = api.request

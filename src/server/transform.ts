@@ -1,5 +1,6 @@
 import qs from 'qs'
 import FormData from 'form-data'
+import type { RequestParam } from '@/typings/server.d'
 import { EnumContentType } from '@/enum'
 import { isArray, isFile } from '@/utils/typeof/index'
 
@@ -15,11 +16,11 @@ export async function transformRequestData(
   // application/json类型不处理
   let data = requestData
   // form类型转换
-  if (contentType === EnumContentType.formUrlencoded) {
+  if (contentType === EnumContentType['form-urlencoded']) {
     data = qs.stringify(requestData)
   }
   // form-data类型转换
-  if (contentType === EnumContentType.formData) {
+  if (contentType === EnumContentType['form-data']) {
     data = await handleFormData(requestData)
   }
 
@@ -65,5 +66,32 @@ async function transformFile(
   } else {
     // 单文件
     formData.append(key, file)
+  }
+}
+
+/**
+ * 处理请求传参格式
+ * @param param - 请求参数
+ */
+export function transformRequestParam(param: RequestParam): any {
+  const headers: any = {}
+  const { url, data, type, axiosConfig, responseType } = param
+  const method = param.method || 'GET'
+  const isParams = ['GET', 'DELETE'].includes(method)
+  // 处理 content-type 类型
+  if (type) {
+    headers['Content-Type'] = EnumContentType[type]
+  }
+  return {
+    method,
+    url,
+    params: isParams ? data : '',
+    data: !isParams ? data : '',
+    responseType: responseType || 'text',
+    headers: {
+      ...axiosConfig,
+      ...headers,
+    },
+    ...axiosConfig,
   }
 }

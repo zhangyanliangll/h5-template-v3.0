@@ -32,6 +32,14 @@ export const api_getMobile = (data: ObjectType): ObjectType =>
     url: `${API_PREFIX}/pet/1`,
     method: 'GET',
     data,
+    type: 'form-urlencoded',
+  })
+
+export const api_getMobile2 = (data: ObjectType): ObjectType =>
+  request({
+    url: `${API_PREFIX}/pet/1`,
+    method: 'GET',
+    data,
   })
 
 /**

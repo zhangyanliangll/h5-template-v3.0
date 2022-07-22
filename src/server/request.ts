@@ -1,5 +1,6 @@
 import type { AxiosRequestConfig } from 'axios'
 import type { RequestParam } from '@/typings/server.d'
+import { transformRequestParam } from './transform'
 import CustomAxiosInstance from './instance'
 
 /**
@@ -19,18 +20,10 @@ export function createRequest(axiosConfig: AxiosRequestConfig): any {
    * - axiosConfig: axios配置
    */
   function request(param: RequestParam): Promise<any> {
-    const { url, data, axiosConfig } = param
-    const method = param.method || 'GET'
-    const isParams = ['GET', 'DELETE'].includes(method)
     const { instance } = customInstance
+    const handleConfig = transformRequestParam(param)
     return new Promise((resolve, reject) => {
-      instance({
-        method,
-        url,
-        params: isParams ? data : '',
-        data: !isParams ? data : '',
-        ...axiosConfig,
-      })
+      instance(handleConfig)
         .then((response) => {
           const {
             config: { url },

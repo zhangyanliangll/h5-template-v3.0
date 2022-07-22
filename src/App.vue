@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, provide, nextTick, onBeforeMount } from 'vue'
-import { api_getMobile } from '@/api/common'
+import { api_getMobile, api_getMobile2 } from '@/api/common'
 export default defineComponent({
   setup() {
     const isRouterAlive = ref(true)
@@ -30,11 +30,15 @@ export default defineComponent({
     onBeforeMount(async () => {
       const data = await api_getMobile({
         keywords: '我',
+        a: '我adasdasdsa',
+        c: '我adasdasdsa',
       })
       console.log(data, '--1')
 
-      const newData = await api_getMobile({
+      const newData = await api_getMobile2({
         keywords: '爱',
+        a: '我ad12312312312312312asdasdsa',
+        c: '我adasdasdsa',
       })
       console.log(newData, '--2')
     })

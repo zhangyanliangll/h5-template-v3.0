@@ -11,8 +11,8 @@ export enum EnumStorageKey {
 /** http请求头的content-type类型 */
 export enum EnumContentType {
   json = 'application/json',
-  formUrlencoded = 'application/x-www-form-urlencoded',
-  formData = 'multipart/form-data',
+  'form-urlencoded' = 'application/x-www-form-urlencoded',
+  'form-data' = 'multipart/form-data',
 }
 
 /** 数据类型 */

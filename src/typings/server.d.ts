@@ -1,3 +1,5 @@
+import type { AxiosRequestConfig, ResponseType } from 'axios'
+
 /** 后端接口返回的数据结构配置 */
 export declare namespace FetchResponse {
   interface Response<T = any> {
@@ -15,12 +17,17 @@ export declare namespace FetchResponse {
 // 请求方式
 export type RequestMethod = 'GET' | 'POST' | 'PUT' | 'DELETE'
 
+// content-type 类型
+export type RequestContentType = 'json' | 'form-data' | 'form-urlencoded'
+
 // 请求参数
 export interface RequestParam {
   url: string
   method: RequestMethod
   data?: any
   axiosConfig?: AxiosRequestConfig
+  responseType?: ResponseType
+  type?: RequestContentType
 }
 
 export type RequestFunType = (options: RequestParam) => Promise<any>
