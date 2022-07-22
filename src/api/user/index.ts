@@ -12,7 +12,7 @@ export const api_Intention = (data: IaddIntentionParams): TaddIntentionRes =>
   })
 
 // GET
-export const api_getList = (data: IaddIntentiondata): TaddIntentionRes =>
+export const api_getList = (data: IaddIntentionParams): TaddIntentionRes =>
   request({
     url: `${API_PREFIX}/security/commissionScheme/queryPage`,
     method: 'GET',
