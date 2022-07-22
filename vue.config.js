@@ -223,7 +223,7 @@ module.exports = {
     proxy: {
       //设置代理
       '/api': {
-        target: 'http://47.107.51.75:8081',
+        target: 'https://mock.apifox.cn/m1/1328576-0-default',
         changeOrigin: true,
         secure: false, //如果是https接口，需要配置该参数
         pathRewrite: {

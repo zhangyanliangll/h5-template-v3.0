@@ -1,53 +1,77 @@
 import axios from 'axios'
-import type { AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios'
-// import qs from 'qs';
-import { isDev } from '@/config'
-// axios 配置
-const instance = axios.create({
-  baseURL: isDev ? '/api' : '', //接口请求地址
-  timeout: 10000,
-  withCredentials: true, //是否携带cookie
-  headers: {
-    'Content-Type': 'application/json',
-    // 'Content-Type': 'application/x-www-form-urlencoded',
-  },
-})
+import type {
+  AxiosRequestConfig,
+  AxiosInstance,
+  AxiosError,
+  AxiosResponse,
+} from 'axios'
+import type { FetchResponse } from '@/typings/server.d'
+import { transformRequestData } from './transform'
+import { REFRESH_TOKEN_CODE } from '@/config'
+import { handleRefreshToken } from './helpers'
+import { getToken } from '@/utils/server'
 
-// 添加请求拦截器
-instance.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
-    // 处理加密及公共携带传参
+/**
+ * 封装axios请求类
+ */
+export default class CustomAxiosInstance {
+  instance: AxiosInstance
 
-    // 在发送请求之前做些什么，比如传token
-    return config
-  },
-  (error: AxiosError) => {
-    // 对请求错误做些什么
-    console.log(error) // for debug
-    return Promise.reject(error)
-  },
-)
+  /**
+   *
+   * @param axiosConfig - axios配置
+   * @param backendConfig - 后端返回的数据配置
+   */
+  constructor(axiosConfig: AxiosRequestConfig) {
+    this.instance = axios.create(axiosConfig)
+    this.setInterceptor()
+  }
 
-// 添加响应拦截器
-instance.interceptors.response.use(
-  (response: AxiosResponse<FetchResponse.Response>) => {
-    const { data, config }: any = response
-    // 对响应数据做点什么
-    console.log(
-      `%c 接收 api_${config.url.replace(/\/(\w+)\//, '')}`,
-      'background:#2472C8;color:#fff',
-      data,
+  /** 设置请求拦截器 */
+  setInterceptor(): void {
+    this.instance.interceptors.request.use(
+      async (config) => {
+        const handleConfig = { ...config }
+
+        if (handleConfig.headers) {
+          // 数据转换
+          const contentType = handleConfig.headers['Content-Type'] as string
+          handleConfig.data = await transformRequestData(
+            handleConfig.data,
+            contentType,
+          )
+          // // 设置token
+          handleConfig.headers.Authorization = getToken()
+        }
+        return handleConfig
+      },
+      (axiosError: AxiosError) => {
+        return Promise.reject(axiosError)
+      },
     )
-    //对错误代码做处理
-    return response
-  },
-  (error: AxiosError) => {
-    // 对响应错误做点什么
-    console.log('err' + error) // for debug
-    return Promise.reject(error)
-  },
-)
+    this.instance.interceptors.response.use(
+      async (response: AxiosResponse<FetchResponse.Response>) => {
+        const { status, data } = response
 
-export default instance
-
-export { instance }
+        if (status === 200 || status < 300 || status === 304) {
+          // 请求成功
+          if (data.code === data.status) {
+            return response
+          }
+          // token失效, 刷新token
+          if (REFRESH_TOKEN_CODE.includes(data.code)) {
+            const config = await handleRefreshToken(response.config)
+            if (config) {
+              return this.instance.request(config)
+            }
+          }
+          return response
+        }
+        return Promise.reject()
+      },
+      (axiosError: AxiosError) => {
+        return Promise.reject(axiosError)
+      },
+    )
+  }
+}

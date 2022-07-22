@@ -1,23 +1,26 @@
-import qs from 'qs'
-import { EnumContentType } from '@/typings/enum'
-/**
- * 请求数据的转换
- * @param requestData - 请求数据
- * @param contentType - 请求头的Content-Type
- */
-export function transformRequestData(
-  requestData: string | any,
-  contentType?: string,
-): Record<string, any> {
-  // application/json类型不处理
-  let data = requestData
-  // form类型转换
-  if (
-    typeof requestData === 'string' &&
-    contentType === EnumContentType.formUrlencoded
-  ) {
-    data = qs.stringify(requestData)
-  }
+import type { AxiosRequestConfig } from 'axios'
+import { useStore } from '@/hooks/use-store'
+import { removeToken, setToken } from '@/utils/server'
+import { api_fetchUpdateToken } from '@/api/common'
 
-  return data
+/**
+ * 刷新token
+ * @param axiosConfig - token失效时的请求配置
+ */
+export async function handleRefreshToken(
+  axiosConfig: AxiosRequestConfig,
+): Promise<any> {
+  const store = useStore()
+  const { data } = await api_fetchUpdateToken({})
+  if (data) {
+    setToken(data)
+    store.commit('user/MU_SET_TOKEN', data)
+    const config = { ...axiosConfig }
+    if (config.headers) {
+      config.headers.Authorization = data.token
+    }
+    return config
+  }
+  removeToken()
+  return null
 }

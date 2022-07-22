@@ -12,7 +12,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide, nextTick } from 'vue'
+import { defineComponent, ref, provide, nextTick, onBeforeMount } from 'vue'
+import { api_getMobile } from '@/api/common'
 export default defineComponent({
   setup() {
     const isRouterAlive = ref(true)
@@ -23,6 +24,20 @@ export default defineComponent({
       await nextTick()
       isRouterAlive.value = true
     }
+    // https://autumnfish.cn/search?keywords=%22%E6%88%91%22
+    // https://mock.apifox.cn/m1/1328576-0-default/pet/1
+
+    onBeforeMount(async () => {
+      const data = await api_getMobile({
+        keywords: '我',
+      })
+      console.log(data, '--1')
+
+      const newData = await api_getMobile({
+        keywords: '爱',
+      })
+      console.log(newData, '--2')
+    })
 
     return {
       isRouterAlive,

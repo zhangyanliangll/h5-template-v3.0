@@ -1,5 +1,5 @@
-import UserModule, { UserModuleState } from './modules/user'
 import AppModule, { AppModuleState } from './modules/app'
+import UserModule, { UserModuleState } from './modules/user'
 
 export type RootStateTypes = {
   user: UserModuleState
