@@ -1,6 +1,6 @@
 .DS_Store
 node_modules
-/h5-temlemt-v3
+/h5-template-v3.0
 
 # local env files
 .env.local
