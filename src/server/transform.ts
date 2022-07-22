@@ -74,24 +74,26 @@ async function transformFile(
  * @param param - 请求参数
  */
 export function transformRequestParam(param: RequestParam): any {
-  const headers: any = {}
-  const { url, data, type, axiosConfig, responseType } = param
+  const { url, data, type, responseType, axiosConfig } = param
   const method = param.method || 'GET'
   const isParams = ['GET', 'DELETE'].includes(method)
-  // 处理 content-type 类型
-  if (type) {
-    headers['Content-Type'] = EnumContentType[type]
-  }
-  return {
+  // 参数
+  const query: Record<string, any> = {
     method,
     url,
     params: isParams ? data : '',
     data: !isParams ? data : '',
-    responseType: responseType || 'text',
-    headers: {
-      ...axiosConfig,
-      ...headers,
-    },
     ...axiosConfig,
   }
+  // 处理 content-type 类型
+  if (type) {
+    query.headers = {
+      ...query.headers,
+      'Content-Type': EnumContentType[type],
+    }
+  }
+  if (responseType) {
+    query.responseType = responseType
+  }
+  return query
 }
