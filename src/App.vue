@@ -13,7 +13,7 @@
 
 <script lang="ts">
 import { defineComponent, ref, provide, nextTick, onBeforeMount } from 'vue'
-import { api_getMobile } from '@/api/common'
+import { getPetApi } from '@/api/common'
 export default defineComponent({
   setup() {
     const isRouterAlive = ref(true)
@@ -28,7 +28,7 @@ export default defineComponent({
     // https://mock.apifox.cn/m1/1328576-0-default/pet/1
 
     onBeforeMount(async () => {
-      const data = await api_getMobile({
+      const data = await getPetApi({
         keywords: '我',
         a: '我adasdasdsa',
         c: '我adasdasdsa',

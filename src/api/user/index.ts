@@ -4,7 +4,7 @@ import { request } from '@/server'
 import { IaddIntentionParams, TaddIntentionRes } from './index.d'
 
 // POST
-export const api_Intention = (data: IaddIntentionParams): TaddIntentionRes =>
+export const setIntentionApi = (data: IaddIntentionParams): TaddIntentionRes =>
   request({
     url: `${API_PREFIX}/security/intentionReport/insertIntentionTransactionReport`,
     method: 'POST',
@@ -12,7 +12,7 @@ export const api_Intention = (data: IaddIntentionParams): TaddIntentionRes =>
   })
 
 // GET
-export const api_getList = (data: IaddIntentionParams): TaddIntentionRes =>
+export const getListApi = (data: IaddIntentionParams): TaddIntentionRes =>
   request({
     url: `${API_PREFIX}/security/commissionScheme/queryPage`,
     method: 'GET',
