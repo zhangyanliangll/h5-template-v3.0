@@ -1,12 +1,12 @@
 import { Toast } from 'vant'
-import { api_getWxConfig } from '@/api/common'
+import { getWxConfigApi } from '@/api/common'
 import { isPro } from '@/config/index'
 
 // 初始化 微信JSDK 配置
 export async function initWxConfig(allowApi: string[]): Promise<void> {
   const url = window.location.href.split('#')[0]
 
-  const { appId, timestamp, nonceStr, signature } = await api_getWxConfig({
+  const { appId, timestamp, nonceStr, signature } = await getWxConfigApi({
     url,
   })
 
