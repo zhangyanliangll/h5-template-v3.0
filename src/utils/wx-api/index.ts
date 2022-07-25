@@ -32,7 +32,7 @@ export async function initWxConfig(allowApi: string[]): Promise<void> {
   })
 }
 
-// 微信扫码功能
+// 微信扫码功能 initWxConfig(['scanQRCode'])
 export function scanQRCode(needResult = 1): Promise<any> {
   return new Promise((resolve, reject) => {
     wx.ready(() => {
@@ -83,7 +83,7 @@ export function chooseImage(): Promise<any> {
   })
 }
 
-// 获取本地图片接口
+// 获取本地图片接口 initWxConfig(['chooseImage','getLocalImgData'])
 export async function getLocalImgData(): Promise<any> {
   const localId = await chooseImage()
   return new Promise((resolve) => {
@@ -136,5 +136,28 @@ export async function initWXShareConfig({
   })
   wx.error((res: any) => {
     alert('出错了：' + res.errMsg)
+  })
+}
+
+// 微信支付 initWxConfig(['chooseWXPay')
+export function chooseWXPay(options: Record<string, any>): Promise<any> {
+  const { timestamp = 0, nonceStr = '', signType = '', paySign = '' } = options
+  return new Promise((resolve, reject) => {
+    wx.ready(() => {
+      wx.chooseWXPay({
+        timestamp, // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+        nonceStr, // 支付签名随机串，不长于 32 位
+        package: options.package, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+        signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+        paySign, // 支付签名
+        success: function (res: any) {
+          // 支付成功后的回调函数
+          resolve(res)
+        },
+        fail: function (err: any) {
+          reject(err)
+        },
+      })
+    })
   })
 }
