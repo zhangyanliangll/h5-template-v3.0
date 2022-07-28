@@ -27,7 +27,7 @@ export interface Iprops {
 }
 
 export interface IoptionAlias {
-  valueKey: string
+  label: string
   value: string
 }
 

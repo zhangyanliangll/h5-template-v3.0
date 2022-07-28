@@ -75,17 +75,16 @@
                 <template
                   #input
                   v-if="
-                    item.targetElement === 'van-picker' ||
-                    (item.popupProps && item.popupProps.type === 'range')
+                   ['van-picker', 'van-calendar'].includes(item.targetElement as string)
                   "
                 >
                   <div>
                     <!-- 时间回显 -->
                     <span
+                      v-if="item.targetElement === 'van-calendar'"
                       :class="{
                         'placeholder-color': !formatterCalendar(item),
                       }"
-                      v-if="item.popupProps && item.popupProps.type === 'range'"
                     >
                       {{
                         formatterCalendar(item) ||
@@ -236,7 +235,7 @@ export default defineComponent({
             item.isLink = isVanPicker && !item.fieldProps?.disabled
             // 默认
             item.optionAlias = item.optionAlias ?? {
-              valueKey: 'text',
+              label: 'text',
               value: 'value',
             }
           }
@@ -245,8 +244,6 @@ export default defineComponent({
           item.isShow = false
           return item
         })
-
-        console.log('!2312312312321')
       })
     }
 
@@ -264,8 +261,10 @@ export default defineComponent({
           form.formQuery[modelValueAttrName as string]
         )
       })
+      // console.log(optionsItem, '------------optionsItem---', optionAlias)
+
       return optionsItem
-        ? optionsItem[(optionAlias as IoptionAlias).valueKey]
+        ? optionsItem[(optionAlias as IoptionAlias).label]
         : null
     }
 
@@ -276,6 +275,14 @@ export default defineComponent({
       separateQuery,
       value: modelValueAttrName,
     }: IformGroupsItem): string {
+      console.log(
+        separateQuery,
+        '------separateQuery',
+        form.formQuery[modelValueAttrName as string],
+      )
+
+      console.log(modelValueAttrName, '------modelValueAttrName')
+
       // 时间区间回显
       if (separateQuery) {
         return separateQuery.reduce(
@@ -317,8 +324,7 @@ export default defineComponent({
           } else {
             form.formQuery[modelValueAttrName as string] =
               value[(optionAlias as IoptionAlias).value as any]
-            selectPickName =
-              value[(optionAlias as IoptionAlias).valueKey as any]
+            selectPickName = value[(optionAlias as IoptionAlias).label as any]
           }
           break
         case 'van-calendar':
@@ -330,14 +336,15 @@ export default defineComponent({
           // 时间区间
           if (separateQuery && Array.isArray(value)) {
             value.forEach((item: any, index: number) => {
-              form.formQuery[separateQuery[index]] = new Date(item, valueFormat)
+              form.formQuery[separateQuery[index]] = new Date(item).format(
+                valueFormat,
+              )
             })
           } else {
             // 单个时间
             form.formQuery[modelValueAttrName as string] = new Date(
               value,
-              valueFormat,
-            )
+            ).format(valueFormat)
           }
           break
 
@@ -350,7 +357,7 @@ export default defineComponent({
 
     // 显示弹窗
     function setPopupShow(item: IformGroupsItem) {
-      console.log(item, '----------')
+      // console.log(item, '----------')
       if (item.fieldProps?.disabled) {
         return
       }

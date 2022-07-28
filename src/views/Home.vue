@@ -83,7 +83,7 @@ export default defineComponent({
         label: '单个日期',
         isLink: true,
         readonly: true,
-        value: 'handoverDate',
+        value: 'bizDate',
         fieldProps: {
           placeholder: '请选择单个日期',
           'value-format': 'YYYY-MM-DD',
