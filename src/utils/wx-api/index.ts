@@ -1,9 +1,10 @@
 import { Toast } from 'vant'
+import { wx, wxApi } from '@/typings/wx.d'
 import { getWxConfigApi } from '@/api/common'
 import { isPro } from '@/config/index'
 
 // 初始化 微信JSDK 配置
-export async function initWxConfig(allowApi: string[]): Promise<void> {
+export async function initWxConfig(allowApi: wxApi[]): Promise<void> {
   const url = window.location.href.split('#')[0]
 
   const { appId, timestamp, nonceStr, signature } = await getWxConfigApi({
@@ -25,7 +26,7 @@ export async function initWxConfig(allowApi: string[]): Promise<void> {
   wx.ready(() => {
     // config后就会执行 不管是不是成功
   })
-  wx.error((res: ObjectType) => {
+  wx.error((res: Record<string, any>) => {
     // 这个地方的好处就是wx.config配置错误，
     // 会弹出窗口哪里错误，然后根据微信文档查询即可。
     alert('出错了：' + res.errMsg)
