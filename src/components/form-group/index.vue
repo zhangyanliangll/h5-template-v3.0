@@ -275,14 +275,6 @@ export default defineComponent({
       separateQuery,
       value: modelValueAttrName,
     }: IformGroupsItem): string {
-      console.log(
-        separateQuery,
-        '------separateQuery',
-        form.formQuery[modelValueAttrName as string],
-      )
-
-      console.log(modelValueAttrName, '------modelValueAttrName')
-
       // 时间区间回显
       if (separateQuery) {
         return separateQuery.reduce(
