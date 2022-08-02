@@ -1,10 +1,5 @@
-import AppModule, { AppModuleState } from './modules/app'
-import UserModule, { UserModuleState } from './modules/user'
-
-export type RootStateTypes = {
-  user: UserModuleState
-  app: AppModuleState
-}
+import AppModule from './modules/app'
+import UserModule from './modules/user'
 
 export default {
   user: UserModule, // 用户数据模块

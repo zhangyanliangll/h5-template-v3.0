@@ -1,5 +1,5 @@
 import { store } from '@/store/index'
-import { RootStateTypes } from '@/store/modules'
+import { RootStateTypes } from '@/store/typings/state-type.d'
 import { Getters, Commit, Dispatch } from './user-store.d'
 
 interface UseStoreHooks {

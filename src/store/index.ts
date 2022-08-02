@@ -1,6 +1,7 @@
 import { InjectionKey } from 'vue'
 import { createStore, Store, useStore as baseUseStore } from 'vuex'
-import modules, { RootStateTypes } from './modules'
+import { RootStateTypes } from './typings/state-type.d'
+import modules from './modules'
 
 // 定义 injection key
 export const key: InjectionKey<Store<RootStateTypes>> = Symbol()
