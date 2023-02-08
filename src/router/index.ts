@@ -16,6 +16,10 @@ const routes: Array<RouteRecordRaw> = [
     path: '/',
     name: 'Home',
     component: Home,
+    meta: {
+      keepAlive: true,
+      clearCachePath: ['/about'],
+    },
   },
 ]
 

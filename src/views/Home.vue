@@ -6,7 +6,7 @@
       :formGroups="(formGroups as any)"
     >
       <template #myFromItem>
-        <div>myFromItem</div>
+        <div>myFromItem1</div>
       </template>
     </FormGroup>
     <div @click="save">save</div>
@@ -14,18 +14,27 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, toRefs, toRaw, ref } from 'vue'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  toRaw,
+  ref,
+  onMounted,
+  onActivated,
+} from 'vue'
 import FormGroup from '_com/form-group/index.vue'
 import type { IFormGroup } from '_com/form-group/form-group'
-
+import useRouter from '@/hooks/user-navigate'
 export default defineComponent({
   name: 'Home',
   components: {
     FormGroup,
   },
   setup() {
-    const formRef = ref({} as IFormGroup)
+    const { navigateTo } = useRouter()
 
+    const formRef = ref({} as IFormGroup)
     const formQuery: ObjectType = {
       propertyAddress: '12312312',
       paymentMethod: '',
@@ -140,22 +149,27 @@ export default defineComponent({
       },
     ]
 
+    onActivated(() => {
+      console.log('-*-onActivated*-*-Home')
+    })
+
+    onMounted(async () => {
+      console.log('-*-onMounted*-*-Home')
+    })
+
     const form = reactive({
       formQuery,
       formGroups,
       async save() {
-        // console.log([1, 2, 3, 4, 5, 6].remove(1))
-        // console.log(' asdsad asdasd sdad '.Trim(true))
-        // console.log('123'.toChies())
-        // console.log('https://www.baidu.com/s?ie=UTF-8&wd=typings'.query('wd'))
         // formRef.value.validateField()
         try {
-          await formRef.value.validateField()
+          // await formRef.value.validateField()
+          navigateTo('/about')
         } catch (error) {
           console.log(error, '------error--')
         }
         console.log(toRaw(form.formQuery), '---formQuery.value===')
-        console.log(form.formQuery, '---formQuery.value===')
+        console.log(form.formQuery, '---formQuery.value===', formQuery)
       },
     })
 

@@ -52,3 +52,7 @@
 | git pull origin master | 拉取 master 代码 |
 | git rebase --continue | 解决完冲突，合并冲突，继续提交；（正在变基...） |
 | git rebase --abort | 会放弃合并，回到 rebase 操作之前的状态，之前的提交的不会丢弃
+
+| git reset --soft HEAD^ | 仅仅撤销 commit ,保留 add
+
+| git reset --hard HEAD^ | 撤销 commit 并且也撤销 add

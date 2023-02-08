@@ -1,43 +1,47 @@
 <template>
-  <keep-alive>
-    <router-view
-      class="app-content-box"
-      v-if="$route.meta.keepAlive && isRouterAlive"
-    ></router-view>
-  </keep-alive>
-  <router-view
-    class="app-content-box"
-    v-if="!$route.meta.keepAlive && isRouterAlive"
-  ></router-view>
+  <router-view v-slot="{ Component, route }" v-if="isRefresh">
+    <!-- fix: ios原生侧滑返回会重新触发动画  -->
+    <transition
+      v-if="platform !== 'IOS'"
+      :name="(route.meta.transitionName as string) || 'slide-in'"
+      mode="out-in"
+    >
+      <keep-alive :include="include">
+        <component :is="Component" :key="route.fullPath" />
+      </keep-alive>
+    </transition>
+    <keep-alive v-else :include="include">
+      <component :is="Component" :key="route.fullPath" />
+    </keep-alive>
+  </router-view>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, provide, nextTick, onBeforeMount } from 'vue'
-import { getPetApi } from '@/api/common'
+import { defineComponent, ref, computed, provide, nextTick } from 'vue'
+import { getPlatform } from '@/utils/tools'
+import { useStore } from '@/hooks/use-store'
 export default defineComponent({
   setup() {
-    const isRouterAlive = ref(true)
+    const platform = getPlatform() // 平台
+    const isRefresh = ref(true) // 手动刷新
+    const store = useStore()
+
+    // 缓存的组件
+    const include = computed((): any => {
+      return store.getters['app/GET_CACHE_MODULE']
+    })
 
     provide('reload', reload)
     async function reload() {
-      isRouterAlive.value = false
+      isRefresh.value = false
       await nextTick()
-      isRouterAlive.value = true
+      isRefresh.value = true
     }
-    // https://autumnfish.cn/search?keywords=%22%E6%88%91%22
-    // https://mock.apifox.cn/m1/1328576-0-default/pet/1
-
-    onBeforeMount(async () => {
-      const data = await getPetApi({
-        keywords: '我',
-        a: '我adasdasdsa',
-        c: '我adasdasdsa',
-      })
-      console.log(data, '--1')
-    })
 
     return {
-      isRouterAlive,
+      isRefresh,
+      platform,
+      include,
     }
   },
 })

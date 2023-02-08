@@ -25,7 +25,8 @@ export default defineComponent({
 
       return toRefs({
         userInfo,
-        GET_USER_INFO,userInfo
+        GET_USER_INFO,
+        userInfo
       })
   }
 </script>;

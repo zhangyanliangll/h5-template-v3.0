@@ -3,6 +3,7 @@ import {
   NavigationGuardNext,
   Router,
 } from 'vue-router'
+import cached from './cached'
 
 export const beforeRouter = (router: Router): void => {
   router.beforeEach(
@@ -11,21 +12,12 @@ export const beforeRouter = (router: Router): void => {
       from: RouteLocationNormalized,
       next: NavigationGuardNext,
     ) => {
-      // 那些页面需要缓存，不要请求刷新数据
-      const path = from.path as string
-      if (
-        to.meta.keepAlivePath &&
-        (to.meta.keepAlivePath as string[]).includes(path)
-      ) {
-        to.meta.isBack = false // 不刷新
-      } else {
-        to.meta.isBack = true
-      }
+      // 设置缓存
+      cached(to, from)
 
       next()
     },
   )
-
   // router.afterEach((to, from) => {
   //   console.log();
   // });

@@ -2,6 +2,7 @@ import { ActionContext } from '@/typings/vuex'
 
 export interface AppModuleState {
   baseUrl: string
+  cacheModule: string[]
 }
 
 export default {
@@ -9,6 +10,7 @@ export default {
   state: (): AppModuleState => {
     return {
       baseUrl: 'https://www.baidu.com/',
+      cacheModule: [],
     }
   },
   getters: {
@@ -21,6 +23,15 @@ export default {
     GET_BASE_URL: (state: AppModuleState): string => {
       return state.baseUrl
     },
+    /**
+     * @description: 获取缓存组件
+     * @param {AppModuleState} state
+     * @return {*}
+     * store.getters['app/GET_CACHE_MODULE'])
+     */
+    GET_CACHE_MODULE: (state: AppModuleState): string[] => {
+      return state.cacheModule
+    },
   },
   mutations: {
     /**
@@ -32,6 +43,29 @@ export default {
      */
     MU_SET_BASE_URL(state: AppModuleState, data: string): void {
       state.baseUrl = data
+    },
+    /**
+     * @description: 设置需要缓存组件
+     * @param {AppModuleState} state
+     * @param {string} data
+     * @return {*}
+     * store.commit('app/MU_SET_CACHE_MODULE', result)
+     */
+    MU_SET_CACHE_MODULE(state: AppModuleState, data: string): void {
+      state.cacheModule.push(data)
+      state.cacheModule = [...new Set(state.cacheModule as string[])]
+    },
+    /**
+     * @description: 清除缓存组件
+     * @param {AppModuleState} state
+     * @param {string} data
+     * @return {*}
+     * store.commit('app/MU_DEL_CACHE_MODULE', result)
+     */
+    MU_DEL_CACHE_MODULE(state: AppModuleState, data: string): void {
+      state.cacheModule = state.cacheModule.filter((name: string) => {
+        return name != data
+      })
     },
   },
   actions: {
